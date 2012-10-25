@@ -1,0 +1,16 @@
+{
+  "name": "scroll-position",
+  "repo": "timoxley/scroll-position",
+  "description": "",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "component/domify": "*",
+    "component/emitter": "*",
+    "timoxley/assert": "*"
+  },
+  "development": {},
+  "scripts": [
+    "index.js"
+  ]
+}
