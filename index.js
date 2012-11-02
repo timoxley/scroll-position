@@ -1,24 +1,60 @@
 var Emitter = require('emitter')
 module.exports = function(nodes, options) {
-	nodes = nodes || []
+  return new ScrollPosition()
+}
+
+function ScrollPosition(nodes, options) {
 	options = options || {}
-	var offset = options.offset || 0
-	var root = window
+	nodes = nodes || []
+  nodes = ensureArray(nodes)
+	this.offset = options.offset || 0
+	this.root = window
 
-	var emitter = new Emitter()
-	root.addEventListener('scroll', function(e) {
-		closestNext()
-	})
-	return emitter
-	var target = 
+  this.oldScroll = this.root.scrollY
+  this.nodes = nodes.sort(sortByOffset)
+
+	this.root.addEventListener('scroll', this.onScroll.bind(this))
 }
 
-module.exports._closestNext = closestNext
-
-function nextClosestNode(nodes, target) {
-	var largerNumbers = nodes.filter(function(node) {
-		return node.offsetTop > target
-	})
-	largerNumbers.sort()
-	return largerNumbers[0]
+function ensureArray(nodes) {
+  var result = [];
+  for (var i = 0; i < nodes.length; i++) {
+    result.push(nodes[startIndex]);
+  }
+  return result;
 }
+
+Emitter(ScrollPosition.prototype)
+
+ScrollPosition.prototype.onScroll = function onScroll(e) {
+  var newScroll = this.root.scrollY
+  var oldScroll = this.oldScroll
+  var scrollingDown = newScroll > oldScroll
+  var passedNodes = []
+  var nodes = this.nodes
+  for(var i = 0; i < nodes.length; i++) {
+    var node = nodes[i]
+    if (scrollingDown) {
+      if (oldScroll < node.offsetTop && newScroll > node.offsetTop) {
+        passedNodes.unshift(node)
+      }
+    } else {
+      if (oldScroll > node.offsetTop && newScroll < node.offsetTop) {
+        passedNodes.push(node)
+      }
+    }
+  }
+  for (var i = 0; i < passedNodes.length; i++) {
+    this.emit('scrollOut', passedNodes[i])
+  }
+
+  this.oldScroll = newScroll
+}
+
+function sortByOffset(a, b) {
+  if (a.offsetTop < b.offsetTop) return -1;
+  if (a.offsetTop > b.offsetTop) return 1;
+  return 0;
+}
+
+

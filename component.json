@@ -5,11 +5,14 @@
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {
-    "component/domify": "*",
     "component/emitter": "*",
+    "timoxley/is-collection": "*"
+  },
+  "development": {
+    "component/domify": "*",
+    "component/classes": "*",
     "timoxley/assert": "*"
   },
-  "development": {},
   "scripts": [
     "index.js"
   ]
