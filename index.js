@@ -20,19 +20,32 @@ function ScrollPosition(nodes) {
 
   // convert NodeLists etc into arrays
   nodes = ensureArray(nodes)
-	this.root = window
 
+	this.root = window
   this.oldScroll = this.root.scrollY
   this.nodes = nodes.sort(sortByOffset)
-	this.root.addEventListener('scroll', this.onScroll.bind(this))
+
+  this.root.addEventListener('scroll', this.onScroll.bind(this))
 }
 
-function ensureArray(nodes) {
-  var result = [];
-  for (var i = 0; i < nodes.length; i++) {
-    result.push(nodes[i]);
+Emitter(ScrollPosition.prototype)
+
+/**
+ * Convert an array-like object into an `Array`.
+ *
+ * @param {Mixed} collection Array or array-like object e.g. an array, arguments or NodeList
+ * @return {Array} Naive attempt at converting input to Array
+ * @api private
+ */
+
+function ensureArray(collection) {
+  if (Array.isArray(collection)) return collection
+
+  var arr = []
+  for (var i = 0; i < collection.length; i++) {
+    arr.push(collection[i])
   }
-  return result;
+  return arr
 }
 
 /**
@@ -43,28 +56,42 @@ function ensureArray(nodes) {
 
 ScrollPosition.prototype.onScroll = function onScroll(e) {
   var newScroll = this.root.scrollY
-  var oldScroll = this.oldScroll
+  var scrolledOut = getScrolledOut(this.oldScroll, newScroll, this.nodes)
+
+  for (var i = 0; i < scrolledOut.length; i++) {
+    this.emit('scrollOut', scrolledOut[i])
+  }
+
+  this.oldScroll = newScroll
+}
+
+/**
+ * Calculates which nodes have been scrolled out.
+ *
+ * @param {Number} oldScroll
+ * @param {Number} newScroll
+ * @param {Array.<HTMLElement>} nodes
+ * @return {Array.<HTMLElement>} nodes that were scrolled out
+ * @api private
+ */
+
+function getScrolledOut(oldScroll, newScroll, nodes) {
+  var scrolledOut = []
   var scrollingDown = newScroll > oldScroll
-  var passedNodes = []
-  var nodes = this.nodes
   for (var i = 0; i < nodes.length; i++) {
     var node = nodes[i]
     var offsetTop = node.offsetTop
     if (scrollingDown) {
-      if (oldScroll < offsetTop && newScroll > offsetTop) {
-        passedNodes.unshift(node)
+      if (oldScroll <= offsetTop && newScroll >= offsetTop) {
+        scrolledOut.unshift(node)
       }
     } else {
-      if (oldScroll > offsetTop && newScroll < offsetTop) {
-        passedNodes.push(node)
+      if (oldScroll >= offsetTop && newScroll <= offsetTop) {
+        scrolledOut.push(node)
       }
     }
   }
-  for (var i = 0; i < passedNodes.length; i++) {
-    this.emit('scrollOut', passedNodes[i])
-  }
-
-  this.oldScroll = newScroll
+  return scrolledOut
 }
 
 /**
