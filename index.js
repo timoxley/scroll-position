@@ -1,10 +1,24 @@
 var Emitter = require('emitter')
+
+/**
+ * ScrollPosition factory
+ * @return {ScrollPosition}
+ */
+
 module.exports = function(nodes) {
   return new ScrollPosition(nodes)
 }
 
+/**
+ * Initialise a new `ScrollPosition`
+ *
+ * @api public
+ */
+
 function ScrollPosition(nodes) {
 	nodes = nodes || []
+
+  // convert NodeLists etc into arrays
   nodes = ensureArray(nodes)
 	this.root = window
 
@@ -21,7 +35,11 @@ function ensureArray(nodes) {
   return result;
 }
 
-Emitter(ScrollPosition.prototype)
+/**
+ * Scroll event handler. Fires `scrollOut` events.
+ *
+ * @api private
+ */
 
 ScrollPosition.prototype.onScroll = function onScroll(e) {
   var newScroll = this.root.scrollY
@@ -48,6 +66,12 @@ ScrollPosition.prototype.onScroll = function onScroll(e) {
 
   this.oldScroll = newScroll
 }
+
+/**
+ * Function for sorting an array of HTMLElements by their offsetTop.
+ *
+ * @api private
+ */
 
 function sortByOffset(a, b) {
   if (a.offsetTop < b.offsetTop) return -1
