@@ -3,6 +3,7 @@ var Emitter = require('emitter')
 /**
  * ScrollPosition factory
  *
+ * @param {Array.<HTMLElement>} nodes
  * @return {ScrollPosition}
  * @api public
  */
