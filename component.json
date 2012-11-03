@@ -2,7 +2,7 @@
   "name": "scroll-position",
   "repo": "timoxley/scroll-position",
   "description": "",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": [],
   "dependencies": {
     "component/emitter": "*"
