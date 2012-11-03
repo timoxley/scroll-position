@@ -2,7 +2,9 @@ var Emitter = require('emitter')
 
 /**
  * ScrollPosition factory
+ *
  * @return {ScrollPosition}
+ * @api public
  */
 
 module.exports = function(nodes) {
@@ -31,24 +33,6 @@ function ScrollPosition(nodes) {
 Emitter(ScrollPosition.prototype)
 
 /**
- * Convert an array-like object into an `Array`.
- *
- * @param {Mixed} collection Array or array-like object e.g. an array, arguments or NodeList
- * @return {Array} Naive attempt at converting input to Array
- * @api private
- */
-
-function ensureArray(collection) {
-  if (Array.isArray(collection)) return collection
-
-  var arr = []
-  for (var i = 0; i < collection.length; i++) {
-    arr.push(collection[i])
-  }
-  return arr
-}
-
-/**
  * Scroll event handler. Fires `scrollOut` events.
  *
  * @api private
@@ -57,11 +41,9 @@ function ensureArray(collection) {
 ScrollPosition.prototype.onScroll = function onScroll(e) {
   var newScroll = this.root.scrollY
   var scrolledOut = getScrolledOut(this.oldScroll, newScroll, this.nodes)
-
   for (var i = 0; i < scrolledOut.length; i++) {
     this.emit('scrollOut', scrolledOut[i])
   }
-
   this.oldScroll = newScroll
 }
 
@@ -106,4 +88,20 @@ function sortByOffset(a, b) {
   return 0
 }
 
+/**
+ * Convert an array-like object into an `Array`.
+ *
+ * @param {Mixed} collection Array or array-like object e.g. an array, arguments or NodeList
+ * @return {Array} Naive attempt at converting input to Array
+ * @api private
+ */
 
+function ensureArray(collection) {
+  if (Array.isArray(collection)) return collection
+
+  var arr = []
+  for (var i = 0; i < collection.length; i++) {
+    arr.push(collection[i])
+  }
+  return arr
+}
