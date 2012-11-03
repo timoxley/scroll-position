@@ -24,7 +24,7 @@
   })
 ```
 
-[Demo](https://timoxley.github.com/scroll-position)
+[Demo](http://timoxley.github.com/scroll-position)
 
 ## License
 
