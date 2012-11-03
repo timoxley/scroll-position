@@ -24,10 +24,10 @@ function ScrollPosition(nodes) {
   nodes = ensureArray(nodes)
 
 	this.root = window
-  this.oldScroll = this.root.scrollY
   this.nodes = nodes.sort(sortByOffset)
 
   this.root.addEventListener('scroll', this.onScroll.bind(this))
+  this.onScroll() // trigger once to initialise
 }
 
 Emitter(ScrollPosition.prototype)
@@ -38,7 +38,8 @@ Emitter(ScrollPosition.prototype)
  * @api private
  */
 
-ScrollPosition.prototype.onScroll = function onScroll(e) {
+ScrollPosition.prototype.onScroll = function onScroll() {
+  this.oldScroll = (this.oldScroll === undefined) ? this.root.scrollY : this.oldScroll
   var newScroll = this.root.scrollY
   var scrolledOut = getScrolledOut(this.oldScroll, newScroll, this.nodes)
   for (var i = 0; i < scrolledOut.length; i++) {
@@ -59,13 +60,13 @@ ScrollPosition.prototype.onScroll = function onScroll(e) {
 
 function getScrolledOut(oldScroll, newScroll, nodes) {
   var scrolledOut = []
-  var scrollingDown = newScroll > oldScroll
+  var scrollingDown = newScroll >= oldScroll
   for (var i = 0; i < nodes.length; i++) {
     var node = nodes[i]
     var offsetTop = node.offsetTop
     if (scrollingDown) {
       if (oldScroll <= offsetTop && newScroll >= offsetTop) {
-        scrolledOut.unshift(node)
+        scrolledOut.push(node)
       }
     } else {
       if (oldScroll >= offsetTop && newScroll <= offsetTop) {
