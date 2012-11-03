@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Mocha</title>
+    <title>Menu Example</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap.no-responsive.no-icons.min.css" rel="stylesheet">
     <style>
@@ -20,7 +20,6 @@
     </style>
   </head>
   <body>
-    <h2>Scroll this page!</h2>
     <div class="container">
       <div class="row">
         <div class="span3">
@@ -39,6 +38,7 @@
       </div>
       <div class="span9">
         <div class="content">
+          <h2>Scroll this page!</h2>
           <div class="item row"><a name="item1"></a>Item 1</div>
           <div class="item row"><a name="item2"></a>Item 2</div>
           <div class="item row"><a name="item3"></a>Item 3</div>
@@ -51,17 +51,18 @@
           <div class="item row"><a name="item10"></a>Item 10</div>
         </div>
       </div>
+    </div>
     <script src="/build/build.js"></script>
     <script>
       var ScrollPosition = require('scroll-position')
       var classes = require('component-classes')
 
-      itemPosition = ScrollPosition(document.querySelectorAll('.item a'))
-      itemPosition.on('scrollOut', function(el) {
-        selectOne(el.getAttribute('name'))
-      })
-
-      function selectOne(name) {
+      var items = document.querySelectorAll('.item a')
+      itemPosition = ScrollPosition(items)
+      itemPosition.on('scrollOut', selectOne)
+      selectOne(items[0])
+      function selectOne(el) {
+        var name = el.getAttribute('name')
         if (!name) return
         selectNone()
         var navItem = document.querySelector('.nav a[href="#'+name+'"]')
