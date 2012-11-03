@@ -5,8 +5,7 @@
   "version": "0.0.2",
   "keywords": [],
   "dependencies": {
-    "component/emitter": "*",
-    "timoxley/is-collection": "*"
+    "component/emitter": "*"
   },
   "development": {
     "component/domify": "*",
