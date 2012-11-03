@@ -7,6 +7,7 @@
     <style>
       body {
         padding: 20px;
+        padding-bottom: 500px;
       }
       .nav li {
         margin-right: 20px;
@@ -23,7 +24,7 @@
     <div class="container">
       <div class="row">
         <div class="span3">
-        <ul class="nav  nav-tabs nav-stacked affix span3">
+        <ul class="nav nav-list nav-stacked nav-pills affix span3">
           <li><a href="#item1">Item 1</a></li>
           <li><a href="#item2">Item 2</a></li>
           <li><a href="#item3">Item 3</a></li>
@@ -57,14 +58,14 @@
 
       itemPosition = ScrollPosition(document.querySelectorAll('.item a'))
       itemPosition.on('scrollOut', function(el) {
-        //var name = el.
-        console.log('el', el.getAttribute('name'))
-        selectOne(el)
+        selectOne(el.getAttribute('name'))
       })
+
       function selectOne(name) {
+        if (!name) return
         selectNone()
-        var navItem = document.querySelectorAll('.nav a[href='+name+']')
-        classes(navItem.parent).add('active')
+        var navItem = document.querySelector('.nav a[href="#'+name+'"]')
+        classes(navItem.parentNode).add('active')
       }
 
       function selectNone() {
@@ -72,7 +73,6 @@
         for (var i = 0; i < navItems.length; i++) {
           classes(navItems[i]).remove('active')
         }
-      
       }
     </script>
   </body>

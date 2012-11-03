@@ -6,7 +6,6 @@ var nodes = []
 var SCROLL_AMOUNT = 50
 var SCROLL_FREQUENCY = 10
 
-
 function generateNodes(num) {
   var nodes = []
 	for(var i = 0; i < num; i++) {
@@ -167,5 +166,4 @@ describe('taking a nodelist', function() {
     })
     startScrolling()
   })
-
 })

@@ -1,25 +1,22 @@
 var Emitter = require('emitter')
-module.exports = function(nodes, options) {
-  return new ScrollPosition()
+module.exports = function(nodes) {
+  return new ScrollPosition(nodes)
 }
 
-function ScrollPosition(nodes, options) {
-	options = options || {}
+function ScrollPosition(nodes) {
 	nodes = nodes || []
   nodes = ensureArray(nodes)
-	this.offset = options.offset || 0
 	this.root = window
 
   this.oldScroll = this.root.scrollY
   this.nodes = nodes.sort(sortByOffset)
-
 	this.root.addEventListener('scroll', this.onScroll.bind(this))
 }
 
 function ensureArray(nodes) {
   var result = [];
   for (var i = 0; i < nodes.length; i++) {
-    result.push(nodes[startIndex]);
+    result.push(nodes[i]);
   }
   return result;
 }
@@ -32,14 +29,15 @@ ScrollPosition.prototype.onScroll = function onScroll(e) {
   var scrollingDown = newScroll > oldScroll
   var passedNodes = []
   var nodes = this.nodes
-  for(var i = 0; i < nodes.length; i++) {
+  for (var i = 0; i < nodes.length; i++) {
     var node = nodes[i]
+    var offsetTop = node.offsetTop
     if (scrollingDown) {
-      if (oldScroll < node.offsetTop && newScroll > node.offsetTop) {
+      if (oldScroll < offsetTop && newScroll > offsetTop) {
         passedNodes.unshift(node)
       }
     } else {
-      if (oldScroll > node.offsetTop && newScroll < node.offsetTop) {
+      if (oldScroll > offsetTop && newScroll < offsetTop) {
         passedNodes.push(node)
       }
     }
@@ -52,9 +50,9 @@ ScrollPosition.prototype.onScroll = function onScroll(e) {
 }
 
 function sortByOffset(a, b) {
-  if (a.offsetTop < b.offsetTop) return -1;
-  if (a.offsetTop > b.offsetTop) return 1;
-  return 0;
+  if (a.offsetTop < b.offsetTop) return -1
+  if (a.offsetTop > b.offsetTop) return 1
+  return 0
 }
 
 
