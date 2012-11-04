@@ -4,7 +4,8 @@ var scrollPosition = require('scroll-position')
 var nodes = []
 
 var SCROLL_AMOUNT = 50
-var SCROLL_FREQUENCY = 10
+var SCROLL_FREQUENCY = 30
+
 
 function generateNodes(num) {
   var nodes = []
@@ -50,120 +51,119 @@ function scrollToTop() {
   window.scrollTo(0, 0)
 }
 
-beforeEach(function() {
-	nodes = []
-})
-
-afterEach(function() {
-	nodes.map(document.body.removeChild.bind(document.body))
-  nodes = []
-  endScrolling()
-})
-
-describe('scrolling down past a single node', function() {
+describe('scroll-position', function() {
+  mocha.timeout(500)
   beforeEach(function() {
-    prepareForScroll(1)
-    nodes = generateNodes(1)
+    nodes = []
   })
 
-  it('triggers an event when it passes', function(done) {
-    this.timeout(1000)
-    var sp = scrollPosition(nodes)
-    sp.on('scrollOut', function(el) {
-      assert.equal(nodes[0], el)
-      sp.off('scrollOut')
-      done()
+  afterEach(function() {
+    nodes.map(document.body.removeChild.bind(document.body))
+    nodes = []
+    endScrolling()
+  })
+
+  describe('scrolling down past a single node', function() {
+    beforeEach(function() {
+      prepareForScroll(1)
+      nodes = generateNodes(1)
     })
-    startScrolling()
-  })
-})
 
-describe('scrolling up past a single node', function() {
-  beforeEach(function() {
-    prepareForScroll(1)
-    scrollToBottom()
-    nodes = generateNodes(1)
-  })
-  it('triggers an event when it passes', function(done) {
-    this.timeout(1000)
-    var sp = scrollPosition(nodes)
-    sp.on('scrollIn', function(el) {
-      assert.equal(nodes[0], el)
-      sp.off('scrollIn')
-      done()
-    })
-    startScrollingUp()
-  })
-})
-
-
-describe('scrolling down past multiple nodes', function() {
-  beforeEach(function() {
-    prepareForScroll(4)
-    nodes = generateNodes(4)
-  })
-  it('triggers an event when it passes', function(done) {
-    this.timeout(4000)
-    var sp = scrollPosition(nodes)
-    var scrolled = []
-    sp.on('scrollOut', function(el) {
-      scrolled.push(el)
-      if (scrolled.length >= 4) {
-        for (var i = 0; i < scrolled.length; i++) {
-          assert.equal(nodes[i], scrolled[i])
-        }
+    it('triggers an event when it passes', function(done) {
+      var sp = scrollPosition(nodes)
+      sp.on('scrollOut', function(el) {
+        assert.equal(nodes[0], el)
         sp.off('scrollOut')
         done()
-      }
+      })
+      startScrolling()
     })
-    startScrolling()
   })
-})
 
-describe('scrolling up past multiple nodes', function() {
-  beforeEach(function() {
-    prepareForScroll(4)
-    scrollToBottom()
-    nodes = generateNodes(4)
-  })
-  it('triggers an event when it passes', function(done) {
-    this.timeout(4000)
-    var sp = scrollPosition(nodes)
-    var scrolled = []
-    sp.on('scrollIn', function(el) {
-      scrolled.push(el)
-      if (scrolled.length >= 4) {
-        scrolled.reverse()
-        for (var i = 0; i < scrolled.length; i++) {
-          assert.equal(nodes[i], scrolled[i])
-        }
+  describe('scrolling up past a single node', function() {
+    beforeEach(function() {
+      prepareForScroll(1)
+      scrollToBottom()
+      nodes = generateNodes(1)
+    })
+    it('triggers an event when it passes', function(done) {
+      var sp = scrollPosition(nodes)
+      sp.on('scrollIn', function(el) {
+        assert.equal(nodes[0], el)
         sp.off('scrollIn')
         done()
-      }
+      })
+      startScrollingUp()
     })
-    startScrollingUp()
   })
-})
 
-describe('taking a nodelist', function() {
-  beforeEach(function() {
-    prepareForScroll(4)
-    nodes = generateNodes(4)
-  })
-  it('triggers an event when it passes', function(done) {
-    this.timeout(4000)
-    var sp = scrollPosition(document.querySelectorAll('.node'))
-    var scrolled = []
-    sp.on('scrollOut', function(el) {
-      scrolled.push(el)
-      if (scrolled.length >= 4) {
-        for (var i = 0; i < scrolled.length; i++) {
-          assert.equal(nodes[i], scrolled[i])
-        }
-        sp.off('scrollOut')
-        done()
-      }
+
+  describe('scrolling down past multiple nodes', function() {
+    beforeEach(function() {
+      prepareForScroll(4)
+      nodes = generateNodes(4)
     })
-    startScrolling()
+    it('triggers an event when it passes', function(done) {
+      var sp = scrollPosition(nodes)
+      var scrolled = []
+      sp.on('scrollOut', function(el) {
+        scrolled.push(el)
+        if (scrolled.length >= 4) {
+          for (var i = 0; i < scrolled.length; i++) {
+            assert.equal(nodes[i], scrolled[i])
+          }
+          sp.off('scrollOut')
+          done()
+        }
+      })
+      startScrolling()
+    })
+  })
+
+  describe('scrolling up past multiple nodes', function() {
+    beforeEach(function() {
+      prepareForScroll(4)
+      scrollToBottom()
+      nodes = generateNodes(4)
+    })
+    it('triggers an event when it passes', function(done) {
+      var sp = scrollPosition(nodes)
+      var scrolled = []
+      sp.on('scrollIn', function(el) {
+        scrolled.push(el)
+        if (scrolled.length >= 4) {
+          scrolled.reverse()
+          for (var i = 0; i < scrolled.length; i++) {
+            assert.equal(nodes[i], scrolled[i])
+          }
+          sp.off('scrollIn')
+          done()
+        }
+      })
+      startScrollingUp()
+    })
+  })
+
+  describe('taking a nodelist', function() {
+    beforeEach(function() {
+      prepareForScroll(4)
+      nodes = generateNodes(4)
+    })
+    it('triggers an event when it passes', function(done) {
+      this.timeout(4000)
+      var sp = scrollPosition(document.querySelectorAll('.node'))
+      var scrolled = []
+      sp.on('scrollOut', function(el) {
+        scrolled.push(el)
+        if (scrolled.length >= 4) {
+          for (var i = 0; i < scrolled.length; i++) {
+            assert.equal(nodes[i], scrolled[i])
+          }
+          sp.off('scrollOut')
+          done()
+        }
+      })
+      startScrolling()
+    })
   })
 })
