@@ -5,6 +5,7 @@
 var Emitter = require('emitter')
 var offset = require('offset')
 var toArray = require('to-array')
+var throttle = require('throttle')
 
 /**
  * ScrollPosition factory
@@ -33,10 +34,15 @@ function ScrollPosition(nodes, options) {
 
   this.offset = options.offset || 0
 
+  // throttle scroll events
+  options.throttle = options.throttle !== undefined
+    ? options.throttle
+    : 50
+
 	this.root = window
   this.nodes = nodes.sort(sortByOffset)
 
-  this.root.addEventListener('scroll', this.onScroll.bind(this))
+  this.root.addEventListener('scroll', throttle(options.throttle, this.onScroll.bind(this)))
   this.onScroll() // trigger once to initialise
 }
 
