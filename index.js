@@ -37,7 +37,7 @@ function ScrollPosition(nodes, options) {
   // throttle scroll events
   options.throttle = options.throttle !== undefined
     ? options.throttle
-    : 50
+    : 20
 
 	this.root = window
   this.nodes = nodes.sort(sortByOffset)
