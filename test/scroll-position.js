@@ -87,9 +87,9 @@ describe('scrolling up past a single node', function() {
   it('triggers an event when it passes', function(done) {
     this.timeout(1000)
     var sp = scrollPosition(nodes)
-    sp.on('scrollOut', function(el) {
+    sp.on('scrollIn', function(el) {
       assert.equal(nodes[0], el)
-      sp.off('scrollOut')
+      sp.off('scrollIn')
       done()
     })
     startScrollingUp()
@@ -130,14 +130,14 @@ describe('scrolling up past multiple nodes', function() {
     this.timeout(4000)
     var sp = scrollPosition(nodes)
     var scrolled = []
-    sp.on('scrollOut', function(el) {
+    sp.on('scrollIn', function(el) {
       scrolled.push(el)
       if (scrolled.length >= 4) {
         scrolled.reverse()
         for (var i = 0; i < scrolled.length; i++) {
           assert.equal(nodes[i], scrolled[i])
         }
-        sp.off('scrollOut')
+        sp.off('scrollIn')
         done()
       }
     })

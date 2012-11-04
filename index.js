@@ -1,5 +1,5 @@
 var Emitter = require('emitter')
-
+var offset = require('offset')
 /**
  * ScrollPosition factory
  *
@@ -8,8 +8,8 @@ var Emitter = require('emitter')
  * @api public
  */
 
-module.exports = function(nodes) {
-  return new ScrollPosition(nodes)
+module.exports = function(nodes, options) {
+  return new ScrollPosition(nodes, options)
 }
 
 /**
@@ -18,11 +18,14 @@ module.exports = function(nodes) {
  * @api public
  */
 
-function ScrollPosition(nodes) {
+function ScrollPosition(nodes, options) {
+  options = options || {}
 	nodes = nodes || []
 
   // convert NodeLists etc into arrays
-  nodes = ensureArray(nodes)
+  nodes = toArray(nodes)
+
+  this.offset = options.offset || 0
 
 	this.root = window
   this.nodes = nodes.sort(sortByOffset)
@@ -40,70 +43,75 @@ Emitter(ScrollPosition.prototype)
  */
 
 ScrollPosition.prototype.onScroll = function onScroll() {
-  this.oldScroll = (this.oldScroll === undefined) ? this.root.scrollY : this.oldScroll
+  // initialize oldScroll
+  var oldScroll = this.oldScroll = (this.oldScroll === undefined) ? this.root.scrollY : this.oldScroll
+
   var newScroll = this.root.scrollY
-  var scrolledOut = getScrolledOut(this.oldScroll, newScroll, this.nodes)
-  for (var i = 0; i < scrolledOut.length; i++) {
-    this.emit('scrollOut', scrolledOut[i])
-  }
+  // how much we scrolled between last event and this event
+  var scrollDelta = oldScroll - newScroll
+
+  var nodes = this.nodes
+  var offset = this.offset
+
+  var scrolledOut = nodes
+    .filter(isScrolledOut.bind(null, offset, scrollDelta))
+  var scrolledIn = nodes
+    .filter(isScrolledIn.bind(null, offset, scrollDelta))
+
+  // fire scrollIn events
+  scrolledOut
+    .map(this.emit.bind(this, 'scrollOut'))
+
+  // fire scrollOut events
+  scrolledIn
+    .map(this.emit.bind(this, 'scrollIn'))
+
+  // fire scrollChange events for both
+  scrolledOut
+    .concat(scrolledIn)
+    .map(this.emit.bind(this, 'scrollChange'))
+
   this.oldScroll = newScroll
 }
 
 /**
- * Calculates which nodes have been scrolled out.
+ * True if a node has been scrolled out.
  *
- * @param {Number} oldScroll
- * @param {Number} newScroll
- * @param {Array.<HTMLElement>} nodes
- * @return {Array.<HTMLElement>} nodes that were scrolled out
+ * @param {Number} baseOffset Base offset for detecting scroll changes
+ * @param {Number} scrollDelta Scroll difference
+ * @param {HTMLElement} node
+ * @return {Boolean} true of element was scrolled out
  * @api private
  */
 
-function getScrolledOut(oldScroll, newScroll, nodes) {
-  var scrolledOut = []
-  var scrollingDown = newScroll >= oldScroll
-  for (var i = 0; i < nodes.length; i++) {
-    var node = nodes[i]
-    var offsetTop = node.offsetTop
-    if (scrollingDown) {
-      if (oldScroll <= offsetTop && newScroll >= offsetTop) {
-        scrolledOut.push(node)
-      }
-    } else {
-      if (oldScroll >= offsetTop && newScroll <= offsetTop) {
-        scrolledOut.push(node)
-      }
-    }
-  }
-  return scrolledOut
+function isScrolledOut(baseOffset, scrollDelta, node) {
+  var offsetTop = offset(node).y
+  return (offsetTop < baseOffset && offsetTop >= scrollDelta)
 }
 
 /**
- * Function for sorting an array of HTMLElements by their offsetTop.
+ * True if a node has been scrolled in.
+ *
+ * @param {Number} baseOffset Base offset for detecting scroll changes
+ * @param {Number} scrollDelta Scroll difference
+ * @param {HTMLElement} node
+ * @return {Boolean} true of element was scrolled in
+ * @api private
+ */
+
+function isScrolledIn(baseOffset, scrollDelta, node) {
+  var offsetTop = offset(node).y
+  return (offsetTop > baseOffset && offsetTop <= scrollDelta)
+}
+
+/**
+ * Function for sorting an array of HTMLElements by their offset.
  *
  * @api private
  */
 
 function sortByOffset(a, b) {
-  if (a.offsetTop < b.offsetTop) return -1
-  if (a.offsetTop > b.offsetTop) return 1
+  if (offset(a).y < offset(b).y) return -1
+  if (offset(a).y > offset(b).y) return 1
   return 0
-}
-
-/**
- * Convert an array-like object into an `Array`.
- *
- * @param {Mixed} collection Array or array-like object e.g. an array, arguments or NodeList
- * @return {Array} Naive attempt at converting input to Array
- * @api private
- */
-
-function ensureArray(collection) {
-  if (Array.isArray(collection)) return collection
-
-  var arr = []
-  for (var i = 0; i < collection.length; i++) {
-    arr.push(collection[i])
-  }
-  return arr
 }

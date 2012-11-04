@@ -58,8 +58,10 @@
       var classes = require('component-classes')
 
       var items = document.querySelectorAll('.item a')
-      itemPosition = ScrollPosition(items)
-      itemPosition.on('scrollOut', selectOne)
+      itemPosition = ScrollPosition(items, {
+        offset: 100
+      })
+      itemPosition.on('scrollChange', selectOne)
       selectOne(items[0])
       function selectOne(el) {
         var name = el.getAttribute('name')
