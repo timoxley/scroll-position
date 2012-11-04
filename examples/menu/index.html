@@ -65,8 +65,9 @@
       itemPosition = ScrollPosition(items, {
         offset: 100
       })
-      itemPosition.on('scrollChange', selectOne)
-      selectOne(items[0])
+      itemPosition.on('scrollInOut', selectOne)
+      selectOne(items[0]) // select first item by default
+
       function selectOne(el) {
         var name = el.getAttribute('name')
         if (!name) return
