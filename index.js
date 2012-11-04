@@ -55,6 +55,9 @@ Emitter(ScrollPosition.prototype)
  */
 
 ScrollPosition.prototype.onScroll = function onScroll() {
+  var nodes = this.nodes
+  var offset = this.offset
+
   // initialize oldScroll
   var oldScroll = this.oldScroll = (this.oldScroll === undefined) ? this.root.scrollY : this.oldScroll
 
@@ -62,23 +65,21 @@ ScrollPosition.prototype.onScroll = function onScroll() {
   // how much we scrolled between last event and this event
   var scrollDelta = oldScroll - newScroll
 
-  var nodes = this.nodes
-  var offset = this.offset
-
+  // figure out which nodes scrolled in or out
   var scrolledOut = nodes
     .filter(isScrolledOut.bind(null, offset, scrollDelta))
   var scrolledIn = nodes
     .filter(isScrolledIn.bind(null, offset, scrollDelta))
 
-  // fire scrollIn events
+  // fire scrollOut events
   scrolledOut
     .map(this.emit.bind(this, 'scrollOut'))
 
-  // fire scrollOut events
+  // fire scrollIn events
   scrolledIn
     .map(this.emit.bind(this, 'scrollIn'))
 
-  // fire scrollChange events for both
+  // fire scrollInOut events for both
   scrolledOut
     .concat(scrolledIn)
     .map(this.emit.bind(this, 'scrollInOut'))
