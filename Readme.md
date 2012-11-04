@@ -10,7 +10,7 @@
 
 ```js
   // dom elements we want to track
-  var items = document.querySelectorAll('div)
+  var items = document.querySelectorAll('div')
 
   var ScrollPosition = require('scroll-position')
   var itemPosition = ScrollPosition(items)
