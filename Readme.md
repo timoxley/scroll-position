@@ -26,7 +26,7 @@
   })
 ```
 
-[Demo](http://timoxley.github.com/scroll-position)
+[Demo](http://timoxley.github.com/scroll-position/examples/menu)
 
 ## Events
 
