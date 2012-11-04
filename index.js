@@ -1,5 +1,11 @@
+/**
+ * Module dependencies.
+ */
+
 var Emitter = require('emitter')
 var offset = require('offset')
+var toArray = require('to-array')
+
 /**
  * ScrollPosition factory
  *

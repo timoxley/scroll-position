@@ -6,7 +6,8 @@
   "keywords": [],
   "dependencies": {
     "component/emitter": "*",
-    "tomerdmnt/offset": "*"
+    "tomerdmnt/offset": "*",
+    "timoxley/to-array": "*"
   },
   "development": {
     "component/domify": "*",
