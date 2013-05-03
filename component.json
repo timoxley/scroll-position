@@ -7,7 +7,6 @@
   "dependencies": {
     "component/emitter": "*",
     "tomerdmnt/offset": "*",
-    "timoxley/to-array": "*",
     "timoxley/throttle": "*"
   },
   "development": {

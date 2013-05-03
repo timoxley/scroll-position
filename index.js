@@ -4,7 +4,7 @@
 
 var Emitter = require('emitter')
 var offset = require('offset')
-var toArray = require('to-array')
+var toArray = Array.prototype.slice.call.bind(Array.prototype.slice)
 var throttle = require('throttle')
 
 /**
