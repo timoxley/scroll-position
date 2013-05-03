@@ -8,4 +8,13 @@ components: component.json
 clean:
 	rm -fr build components template.js
 
-.PHONY: clean
+examples:
+	git checkout -B gh-pages
+	git merge master --no-edit
+	make -B
+	git add build -f
+	-git commit -m "Update examples."
+	git push -f origin gh-pages
+	git checkout master
+
+.PHONY: clean examples
