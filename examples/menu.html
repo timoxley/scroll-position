@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Menu Example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap.no-responsive.no-icons.min.css" rel="stylesheet">
+    <style>
+      body {
+        padding: 20px;
+        padding-bottom: 500px;
+      }
+      .nav li {
+        margin-right: 20px;
+      }
+      .item {
+        height: 300px;
+        background: #eee;
+        margin-bottom: 20px;
+        position: relative;
+        text-align: center;
+      }
+      .item span {
+        position: absolute;
+        top: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="span3">
+        <ul class="nav nav-list nav-stacked nav-pills affix span3">
+          <li><a href="#item1">Item 1</a></li>
+          <li><a href="#item2">Item 2</a></li>
+          <li><a href="#item3">Item 3</a></li>
+          <li><a href="#item4">Item 4</a></li>
+          <li><a href="#item5">Item 5</a></li>
+          <li><a href="#item6">Item 6</a></li>
+          <li><a href="#item7">Item 7</a></li>
+          <li><a href="#item8">Item 8</a></li>
+          <li><a href="#item9">Item 9</a></li>
+          <li><a href="#item10">Item 10</a></li>
+        </ul>
+      </div>
+      <div class="span9">
+        <div class="content">
+          <h2>Scroll this page!</h2>
+          <div class="item row"><a name="item1"></a><span class="badge">Item 1</span></div>
+          <div class="item row"><a name="item2"></a><span class="badge">Item 2</span></div>
+          <div class="item row"><a name="item3"></a><span class="badge">Item 3</span></div>
+          <div class="item row"><a name="item4"></a><span class="badge">Item 4</span></div>
+          <div class="item row"><a name="item5"></a><span class="badge">Item 5</span></div>
+          <div class="item row"><a name="item6"></a><span class="badge">Item 6</span></div>
+          <div class="item row"><a name="item7"></a><span class="badge">Item 7</span></div>
+          <div class="item row"><a name="item8"></a><span class="badge">Item 8</span></div>
+          <div class="item row"><a name="item9"></a><span class="badge">Item 9</span></div>
+          <div class="item row"><a name="item10"></a><span class="badge">Item 10</span></div>
+        </div>
+      </div>
+    </div>
+    <script src="../build/build.js"></script>
+    <script>
+      var ScrollPosition = require('scroll-position')
+      var classes = require('component-classes')
+
+      var items = document.querySelectorAll('.item a')
+      itemPosition = ScrollPosition(items, {
+        offset: 100
+      })
+      itemPosition.on('scrollInOut', selectOne)
+      selectOne(items[0]) // select first item by default
+
+      function selectOne(el) {
+        var name = el.getAttribute('name')
+        if (!name) return
+        selectNone()
+        var navItem = document.querySelector('.nav a[href="#'+name+'"]')
+        classes(navItem.parentNode).add('active')
+      }
+
+      function selectNone() {
+        var navItems = document.querySelectorAll('.nav li')
+        for (var i = 0; i < navItems.length; i++) {
+          classes(navItems[i]).remove('active')
+        }
+      }
+    </script>
+    <a href="https://github.com/timoxley/scroll-position"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+  </body>
+</html>
