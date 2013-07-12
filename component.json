@@ -6,7 +6,6 @@
   "keywords": [],
   "dependencies": {
     "component/emitter": "*",
-    "tomerdmnt/offset": "*",
     "timoxley/throttle": "*"
   },
   "development": {

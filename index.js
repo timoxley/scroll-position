@@ -3,9 +3,9 @@
  */
 
 var Emitter = require('emitter')
-var offset = require('offset')
-var toArray = Array.prototype.slice.call.bind(Array.prototype.slice)
 var throttle = require('throttle')
+
+var toArray = Array.prototype.slice.call.bind(Array.prototype.slice)
 
 /**
  * ScrollPosition factory
@@ -99,7 +99,7 @@ ScrollPosition.prototype.onScroll = function onScroll() {
  */
 
 function isScrolledOut(baseOffset, scrollDelta, node) {
-  var offsetTop = offset(node).y
+  var offsetTop = node.getBoundingClientRect().top
   var previous = offsetTop - scrollDelta
   // if previously was scrolled in
   if (previous >= baseOffset) {
@@ -120,7 +120,7 @@ function isScrolledOut(baseOffset, scrollDelta, node) {
  */
 
 function isScrolledIn(baseOffset, scrollDelta, node) {
-  var offsetTop = offset(node).y
+  var offsetTop = node.getBoundingClientRect().top
   var previous = offsetTop - scrollDelta
   // if previously was scrolled out
   if (previous <= baseOffset) {
