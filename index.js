@@ -32,8 +32,8 @@ function ScrollPosition(nodes, options) {
   // convert NodeLists etc into arrays
   nodes = toArray(nodes)
 
-  this.offsetDown = options.offsetDown || 0
-  this.offsetUp = options.offsetUp || 0
+  this.offsetOut = options.offsetOut || 0
+  this.offsetIn = options.offsetIn || 0
 
   // throttle scroll events
   options.throttle = options.throttle !== undefined
@@ -57,8 +57,8 @@ Emitter(ScrollPosition.prototype)
 
 ScrollPosition.prototype.onScroll = function onScroll() {
   var nodes = this.nodes
-  var offsetDown = this.offsetDown
-  var offsetUp = this.offsetUp
+  var offsetOut = this.offsetOut
+  var offsetIn = this.offsetIn
 
   // initialize oldScroll
   var oldScroll = this.oldScroll = (this.oldScroll === undefined) ? this.root.scrollY : this.oldScroll
@@ -68,9 +68,9 @@ ScrollPosition.prototype.onScroll = function onScroll() {
   var scrollDelta = oldScroll - newScroll
   // figure out which nodes scrolled in or out
   var scrolledOut = nodes
-    .filter(isScrolledOut.bind(null, offsetDown, scrollDelta))
+    .filter(isScrolledOut.bind(null, offsetOut, scrollDelta))
   var scrolledIn = nodes.slice().reverse()
-    .filter(isScrolledIn.bind(null, offsetUp, scrollDelta))
+    .filter(isScrolledIn.bind(null, offsetIn, scrollDelta))
 
   // fire scrollOut events
   scrolledOut

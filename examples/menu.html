@@ -65,8 +65,8 @@
 
       var items = document.querySelectorAll('.item a')
       itemPosition = ScrollPosition(items, {
-        offsetUp: 0,
-        offsetDown: 100
+        offsetIn: 0,
+        offsetOut: 100
       })
       itemPosition.on('scrollInOut', selectOne)
       selectOne(items[0]) // select first item by default
