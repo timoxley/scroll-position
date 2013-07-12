@@ -2,10 +2,11 @@
   "name": "scroll-position",
   "repo": "timoxley/scroll-position",
   "description": "",
-  "version": "0.2.1",
+  "version": "0.3.1",
   "keywords": [],
   "dependencies": {
     "component/emitter": "*",
+    "tomerdmnt/offset": "*",
     "timoxley/throttle": "*"
   },
   "development": {
