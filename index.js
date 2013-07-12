@@ -32,7 +32,8 @@ function ScrollPosition(nodes, options) {
   // convert NodeLists etc into arrays
   nodes = toArray(nodes)
 
-  this.offset = options.offset || 0
+  this.offsetDown = options.offsetDown || 0
+  this.offsetUp = options.offsetUp || 0
 
   // throttle scroll events
   options.throttle = options.throttle !== undefined
@@ -56,7 +57,8 @@ Emitter(ScrollPosition.prototype)
 
 ScrollPosition.prototype.onScroll = function onScroll() {
   var nodes = this.nodes
-  var offset = this.offset
+  var offsetDown = this.offsetDown
+  var offsetUp = this.offsetUp
 
   // initialize oldScroll
   var oldScroll = this.oldScroll = (this.oldScroll === undefined) ? this.root.scrollY : this.oldScroll
@@ -64,12 +66,11 @@ ScrollPosition.prototype.onScroll = function onScroll() {
   var newScroll = this.root.scrollY
   // how much we scrolled between last event and this event
   var scrollDelta = oldScroll - newScroll
-
   // figure out which nodes scrolled in or out
   var scrolledOut = nodes
-    .filter(isScrolledOut.bind(null, offset, scrollDelta))
-  var scrolledIn = nodes
-    .filter(isScrolledIn.bind(null, offset, scrollDelta))
+    .filter(isScrolledOut.bind(null, offsetDown, scrollDelta))
+  var scrolledIn = nodes.slice().reverse()
+    .filter(isScrolledIn.bind(null, offsetUp, scrollDelta))
 
   // fire scrollOut events
   scrolledOut
@@ -99,7 +100,13 @@ ScrollPosition.prototype.onScroll = function onScroll() {
 
 function isScrolledOut(baseOffset, scrollDelta, node) {
   var offsetTop = offset(node).y
-  return (offsetTop < baseOffset && offsetTop >= scrollDelta)
+  var previous = offsetTop - scrollDelta
+  // if previously was scrolled in
+  if (previous >= baseOffset) {
+    // and falls below offset threshold
+    return (offsetTop < baseOffset)
+  }
+  return false
 }
 
 /**
@@ -114,7 +121,14 @@ function isScrolledOut(baseOffset, scrollDelta, node) {
 
 function isScrolledIn(baseOffset, scrollDelta, node) {
   var offsetTop = offset(node).y
-  return (offsetTop > baseOffset && offsetTop <= scrollDelta)
+  var previous = offsetTop - scrollDelta
+  // if previously was scrolled out
+  if (previous <= baseOffset) {
+    // and falls beyond offset threshold
+    return (offsetTop >= baseOffset)
+  }
+  return false
+
 }
 
 /**
