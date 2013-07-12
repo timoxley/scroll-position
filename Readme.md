@@ -13,7 +13,11 @@
   var items = document.querySelectorAll('div')
 
   var ScrollPosition = require('scroll-position')
-  var itemPosition = ScrollPosition(items)
+  var itemPosition = ScrollPosition(items, {
+    // recommended settings for something like highlighting menu items
+    offsetOut: 100, // y position in px where items leave the viewport
+    offsetIn: 0 // y position where items enter the viewport
+  })
 
   itemPosition.on('scrollOut', function(el) {
     console.log(el) // this element was scrolled out of the top of the viewport
