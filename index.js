@@ -138,7 +138,7 @@ function isScrolledIn(baseOffset, scrollDelta, node) {
  */
 
 function sortByOffset(a, b) {
-  if (offset(a).y < offset(b).y) return -1
-  if (offset(a).y > offset(b).y) return 1
+  if (a.getBoundingClientRect().top < b.getBoundingClientRect().top) return -1
+  if (a.getBoundingClientRect().top > b.getBoundingClientRect().top) return 1
   return 0
 }
