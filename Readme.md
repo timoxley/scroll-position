@@ -19,16 +19,17 @@ var itemPosition = ScrollPosition(items, {
   offsetIn: 0 // y position where items enter the viewport
 })
 
-itemPosition.on('scrollOut', function(el) {
+itemPosition.on('out', function(el) {
   // el was scrolled out of the top of the viewport
   console.log(el)
 })
-itemPosition.on('scrollIn', function(el) {
+itemPosition.on('in', function(el) {
   // el was scrolled in from the top of the viewport
   console.log(el)
 })
-itemPosition.on('scrollInOut', function(el) {
-  console.log(el) // this element was scrolled in or out of the top of the viewport
+itemPosition.on('inOut', function(el) {
+  // el was scrolled in or out of the top of the viewport
+  console.log(el)
 })
 ```
 
@@ -36,26 +37,25 @@ itemPosition.on('scrollInOut', function(el) {
 
 ## Events
 
-### scrollOut
+### out/scrollOut
 Fired whenever one of the supplied items is scrolled out the top of the viewport
-e.g scrolling down, and the item goes past the top of the window.
+e.g scrolling down, and the item goes out the top of the viewport.
 
-The first arguments to the event handler is the element that was scrolled out.
+The first argument to the callback is the element which scrolled out.
 
-### scrollIn
+### in/scrollIn
 Fired whenever one of the supplied items is scrolled into the top of the viewport
-e.g scrolling up, and the item enters the top of the window.
+e.g scrolling up, and the item enters the top of the viewport.
 
-The first arguments to the event handler is the element that was scrolled in.
+The first argument to the callback is the element whom scrolled in.
 
-### scrollInOut
+### inOut/scrollInOut
 
-Fired whenever one of the supplied items is scrolled in or out of the top of the viewport
+Fired whenever one of the target items scrolls in OR out of the top of the viewport.
 e.g scrolling up or down, and the item enters or leaves the top of the window.
 
-The first arguments to the event handler is the element that was scrolled in or out.
+The first argument to the callback is the element which scrolled in or out.
 
 ## License
 
-  MIT
-
+MIT
