@@ -9,25 +9,27 @@
 ## Example
 
 ```js
-  // dom elements we want to track
-  var items = document.querySelectorAll('div')
+// Elements we want to track
+var items = document.querySelectorAll('div')
 
-  var ScrollPosition = require('scroll-position')
-  var itemPosition = ScrollPosition(items, {
-    // recommended settings for something like highlighting menu items
-    offsetOut: 100, // y position in px where items leave the viewport
-    offsetIn: 0 // y position where items enter the viewport
-  })
+var ScrollPosition = require('scroll-position')
+var itemPosition = ScrollPosition(items, {
+  // Default settings
+  offsetOut: 100, // y position in px where items leave the viewport
+  offsetIn: 0 // y position where items enter the viewport
+})
 
-  itemPosition.on('scrollOut', function(el) {
-    console.log(el) // this element was scrolled out of the top of the viewport
-  })
-  itemPosition.on('scrollIn', function(el) {
-    console.log(el) // this element was scrolled in from the top of the viewport
-  })
-  itemPosition.on('scrollInOut', function(el) {
-    console.log(el) // this element was scrolled in or out of the top of the viewport
-  })
+itemPosition.on('scrollOut', function(el) {
+  // el was scrolled out of the top of the viewport
+  console.log(el)
+})
+itemPosition.on('scrollIn', function(el) {
+  // el was scrolled in from the top of the viewport
+  console.log(el)
+})
+itemPosition.on('scrollInOut', function(el) {
+  console.log(el) // this element was scrolled in or out of the top of the viewport
+})
 ```
 
 [Demo](http://timoxley.github.com/scroll-position/examples/menu)

@@ -32,7 +32,7 @@ function ScrollPosition(nodes, options) {
   // convert NodeLists etc into arrays
   nodes = toArray(nodes)
 
-  this.offsetOut = options.offsetOut || 0
+  this.offsetOut = options.offsetOut || 100
   this.offsetIn = options.offsetIn || 0
 
   // throttle scroll events
