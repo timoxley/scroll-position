@@ -73,20 +73,15 @@ ScrollPosition.prototype.onScroll = function onScroll() {
     .filter(isScrolledIn.bind(null, offsetIn, scrollDelta))
 
   // fire scrollOut events
-  scrolledOut
-    .map(this.emit.bind(this, 'out'))
-    .map(this.emit.bind(this, 'scrollOut'))
+  scrolledOut.forEach(this.emit.bind(this, 'out'))
 
   // fire scrollIn events
-  scrolledIn
-    .map(this.emit.bind(this, 'in'))
-    .map(this.emit.bind(this, 'scrollIn'))
+  scrolledIn.forEach(this.emit.bind(this, 'in'))
 
   // fire scrollInOut events for both
   scrolledOut
     .concat(scrolledIn)
-    .map(this.emit.bind(this, 'inOut'))
-    .map(this.emit.bind(this, 'scrollInOut'))
+    .forEach(this.emit.bind(this, 'inOut'))
 
   this.oldScroll = newScroll
 }
