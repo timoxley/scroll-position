@@ -19,7 +19,7 @@ function generateNodes(num) {
 
 function generateNode(id) {
   if (id == null) id = new Date().valueOf()
-  return domify('<div class="node" id="node-'+id+'" style="height: 100px; width: 200px; outline: 1px red solid;"></div>')[0]
+  return domify('<div class="node" id="node-'+id+'" style="height: 100px; width: 200px; outline: 1px red solid;"></div>')
 }
 
 function prepareForScroll(n) {

@@ -1,18 +1,19 @@
 {
   "name": "scroll-position",
   "repo": "timoxley/scroll-position",
-  "description": "",
+  "description": "listen for scroll in/out events on DOM elements",
   "version": "0.3.2",
-  "keywords": [],
+  "keywords": [
+    "scroll"
+  ],
   "dependencies": {
-    "component/emitter": "*",
-    "tomerdmnt/offset": "*",
-    "timoxley/throttle": "*"
+    "component/emitter": "1.0.1",
+    "timoxley/throttle": "0.0.3"
   },
   "development": {
-    "component/domify": "*",
-    "component/classes": "*",
-    "timoxley/assert": "*"
+    "component/domify": "1.0.0",
+    "component/classes": "1.1.3",
+    "timoxley/assert": "0.0.1"
   },
   "scripts": [
     "index.js"
