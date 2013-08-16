@@ -2,7 +2,7 @@
   "name": "scroll-position",
   "repo": "timoxley/scroll-position",
   "description": "listen for scroll in/out events on DOM elements",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "keywords": [
     "scroll"
   ],
