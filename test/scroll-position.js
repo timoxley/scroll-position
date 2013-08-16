@@ -71,9 +71,9 @@ describe('scroll-position', function() {
 
     it('triggers an event when it passes', function(done) {
       var sp = scrollPosition(nodes)
-      sp.on('scrollOut', function(el) {
+      sp.on('out', function(el) {
         assert.equal(nodes[0], el)
-        sp.off('scrollOut')
+        sp.off('out')
         done()
       })
       startScrolling()
@@ -88,9 +88,9 @@ describe('scroll-position', function() {
     })
     it('triggers an event when it passes', function(done) {
       var sp = scrollPosition(nodes)
-      sp.on('scrollIn', function(el) {
+      sp.on('in', function(el) {
         assert.equal(nodes[0], el)
-        sp.off('scrollIn')
+        sp.off('in')
         done()
       })
       startScrollingUp()
@@ -106,13 +106,13 @@ describe('scroll-position', function() {
     it('triggers an event when it passes', function(done) {
       var sp = scrollPosition(nodes)
       var scrolled = []
-      sp.on('scrollOut', function(el) {
+      sp.on('out', function(el) {
         scrolled.push(el)
         if (scrolled.length >= 4) {
           for (var i = 0; i < scrolled.length; i++) {
             assert.equal(nodes[i], scrolled[i])
           }
-          sp.off('scrollOut')
+          sp.off('out')
           done()
         }
       })
@@ -129,14 +129,14 @@ describe('scroll-position', function() {
     it('triggers an event when it passes', function(done) {
       var sp = scrollPosition(nodes)
       var scrolled = []
-      sp.on('scrollIn', function(el) {
+      sp.on('in', function(el) {
         scrolled.push(el)
         if (scrolled.length >= 4) {
           scrolled.reverse()
           for (var i = 0; i < scrolled.length; i++) {
             assert.equal(nodes[i], scrolled[i])
           }
-          sp.off('scrollIn')
+          sp.off('in')
           done()
         }
       })
@@ -153,13 +153,13 @@ describe('scroll-position', function() {
       this.timeout(4000)
       var sp = scrollPosition(document.querySelectorAll('.node'))
       var scrolled = []
-      sp.on('scrollOut', function(el) {
+      sp.on('out', function(el) {
         scrolled.push(el)
         if (scrolled.length >= 4) {
           for (var i = 0; i < scrolled.length; i++) {
             assert.equal(nodes[i], scrolled[i])
           }
-          sp.off('scrollOut')
+          sp.off('out')
           done()
         }
       })
