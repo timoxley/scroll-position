@@ -1,11 +1,11 @@
 var domify = require('component-domify')
 var assert = require('timoxley-assert')
-var scrollPosition = require('scroll-position')
+var ScrollPosition = require('scroll-position')
 var nodes = []
 
 var SCROLL_AMOUNT = 50
 var SCROLL_FREQUENCY = 30
-
+var NUM_ELS = 4
 
 function generateNodes(num) {
   var nodes = []
@@ -55,6 +55,8 @@ describe('scroll-position', function() {
   mocha.timeout(500)
   beforeEach(function() {
     nodes = []
+    // reset so testing is more sensible
+    ScrollPosition.defaultOffsetOut = 0
   })
 
   afterEach(function() {
@@ -70,7 +72,7 @@ describe('scroll-position', function() {
     })
 
     it('triggers an event when it passes', function(done) {
-      var sp = scrollPosition(nodes)
+      var sp = ScrollPosition(nodes)
       sp.on('out', function(el) {
         assert.equal(nodes[0], el)
         sp.off('out')
@@ -87,7 +89,7 @@ describe('scroll-position', function() {
       nodes = generateNodes(1)
     })
     it('triggers an event when it passes', function(done) {
-      var sp = scrollPosition(nodes)
+      var sp = ScrollPosition(nodes)
       sp.on('in', function(el) {
         assert.equal(nodes[0], el)
         sp.off('in')
@@ -100,15 +102,15 @@ describe('scroll-position', function() {
 
   describe('scrolling down past multiple nodes', function() {
     beforeEach(function() {
-      prepareForScroll(4)
-      nodes = generateNodes(4)
+      prepareForScroll(NUM_ELS)
+      nodes = generateNodes(NUM_ELS)
     })
     it('triggers an event when it passes', function(done) {
-      var sp = scrollPosition(nodes)
+      var sp = ScrollPosition(nodes)
       var scrolled = []
       sp.on('out', function(el) {
         scrolled.push(el)
-        if (scrolled.length >= 4) {
+        if (scrolled.length >= NUM_ELS) {
           for (var i = 0; i < scrolled.length; i++) {
             assert.equal(nodes[i], scrolled[i])
           }
@@ -122,16 +124,16 @@ describe('scroll-position', function() {
 
   describe('scrolling up past multiple nodes', function() {
     beforeEach(function() {
-      prepareForScroll(4)
+      prepareForScroll(NUM_ELS)
       scrollToBottom()
-      nodes = generateNodes(4)
+      nodes = generateNodes(NUM_ELS)
     })
     it('triggers an event when it passes', function(done) {
-      var sp = scrollPosition(nodes)
+      var sp = ScrollPosition(nodes)
       var scrolled = []
       sp.on('in', function(el) {
         scrolled.push(el)
-        if (scrolled.length >= 4) {
+        if (scrolled.length >= NUM_ELS) {
           scrolled.reverse()
           for (var i = 0; i < scrolled.length; i++) {
             assert.equal(nodes[i], scrolled[i])
@@ -144,18 +146,42 @@ describe('scroll-position', function() {
     })
   })
 
+  describe('inOut on up and down', function() {
+    beforeEach(function() {
+      prepareForScroll(NUM_ELS)
+      nodes = generateNodes(NUM_ELS)
+    })
+    it('triggers events for down and up', function(done) {
+      this.timeout(4000)
+      var sp = ScrollPosition(nodes)
+      var scrolled = []
+      sp.on('inOut', function(el) {
+        scrolled.push(el)
+        // go back up at half-way
+        if (scrolled.length === NUM_ELS) return scrollToTop()
+        if (scrolled.length === NUM_ELS * 2) {
+          // should check scrolled = els down then els up but
+          // too hard to check
+          sp.off('inOut')
+          done()
+        }
+      })
+      startScrolling()
+    })
+  })
+
   describe('taking a nodelist', function() {
     beforeEach(function() {
-      prepareForScroll(4)
-      nodes = generateNodes(4)
+      prepareForScroll(NUM_ELS)
+      nodes = generateNodes(NUM_ELS)
     })
     it('triggers an event when it passes', function(done) {
       this.timeout(4000)
-      var sp = scrollPosition(document.querySelectorAll('.node'))
+      var sp = ScrollPosition(document.querySelectorAll('.node'))
       var scrolled = []
       sp.on('out', function(el) {
         scrolled.push(el)
-        if (scrolled.length >= 4) {
+        if (scrolled.length >= NUM_ELS) {
           for (var i = 0; i < scrolled.length; i++) {
             assert.equal(nodes[i], scrolled[i])
           }

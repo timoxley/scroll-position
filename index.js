@@ -15,9 +15,15 @@ var toArray = Function.call.bind([].slice)
  * @api public
  */
 
-module.exports = function(nodes, options) {
-  return new ScrollPosition(nodes, options)
-}
+module.exports = ScrollPosition
+
+/**
+ * Class-level variables
+ * @api public
+ */
+
+ScrollPosition.defaultOffsetOut = 100
+ScrollPosition.defaultOffsetIn = 0
 
 /**
  * Initialise a new `ScrollPosition`
@@ -26,14 +32,15 @@ module.exports = function(nodes, options) {
  */
 
 function ScrollPosition(nodes, options) {
+  if (!(this instanceof ScrollPosition)) return new ScrollPosition(nodes, options)
   options = options || {}
   nodes = nodes || []
 
   // convert NodeLists etc into arrays
   nodes = toArray(nodes)
 
-  this.offsetOut = options.offsetOut || 100
-  this.offsetIn = options.offsetIn || 0
+  this.offsetOut = options.offsetOut || ScrollPosition.defaultOffsetOut
+  this.offsetIn = options.offsetIn || ScrollPosition.defaultOffsetIn
 
   // throttle scroll events
   options.throttle = options.throttle !== undefined
