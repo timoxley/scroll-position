@@ -1,11 +1,11 @@
+
 /**
  * Module dependencies.
  */
 
 var Emitter = require('emitter')
 var throttle = require('throttle')
-
-var toArray = Array.prototype.slice.call.bind(Array.prototype.slice)
+var toArray = Function.call.bind([].slice)
 
 /**
  * ScrollPosition factory
@@ -27,7 +27,7 @@ module.exports = function(nodes, options) {
 
 function ScrollPosition(nodes, options) {
   options = options || {}
-	nodes = nodes || []
+  nodes = nodes || []
 
   // convert NodeLists etc into arrays
   nodes = toArray(nodes)
@@ -61,7 +61,9 @@ ScrollPosition.prototype.onScroll = function onScroll() {
   var offsetIn = this.offsetIn
 
   // initialize oldScroll
-  var oldScroll = this.oldScroll = (this.oldScroll === undefined) ? this.root.scrollY : this.oldScroll
+  var oldScroll = this.oldScroll = this.oldScroll === undefined
+    ? this.root.scrollY
+    : this.oldScroll
 
   var newScroll = this.root.scrollY
   // how much we scrolled between last event and this event
