@@ -37,19 +37,19 @@ itemPosition.on('inOut', function(el) {
 
 ## Events
 
-### out/scrollOut
+### out
 Fired whenever one of the supplied items is scrolled out the top of the viewport
 e.g scrolling down, and the item goes out the top of the viewport.
 
 The first argument to the callback is the element which scrolled out.
 
-### in/scrollIn
+### in
 Fired whenever one of the supplied items is scrolled into the top of the viewport
 e.g scrolling up, and the item enters the top of the viewport.
 
 The first argument to the callback is the element whom scrolled in.
 
-### inOut/scrollInOut
+### inOut
 
 Fired whenever one of the target items scrolls in OR out of the top of the viewport.
 e.g scrolling up or down, and the item enters or leaves the top of the window.
